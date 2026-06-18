@@ -20,6 +20,7 @@ import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedLeconLeconIdRouteImport } from './routes/_authenticated/lecon.$leconId'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated/admin/questions'
+import { Route as AuthenticatedAdminModulesRouteImport } from './routes/_authenticated/admin/modules'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -79,6 +80,12 @@ const AuthenticatedAdminQuestionsRoute =
     path: '/questions',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminModulesRoute =
+  AuthenticatedAdminModulesRouteImport.update({
+    id: '/modules',
+    path: '/modules',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/admin/modules': typeof AuthenticatedAdminModulesRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -99,6 +107,7 @@ export interface FileRoutesByTo {
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/admin/modules': typeof AuthenticatedAdminModulesRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -113,6 +122,7 @@ export interface FileRoutesById {
   '/_authenticated/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/_authenticated/parcours': typeof AuthenticatedParcoursRoute
   '/_authenticated/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/_authenticated/admin/modules': typeof AuthenticatedAdminModulesRoute
   '/_authenticated/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/_authenticated/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/examen-blanc'
     | '/parcours'
     | '/tableau-bord'
+    | '/admin/modules'
     | '/admin/questions'
     | '/lecon/$leconId'
     | '/admin/'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/examen-blanc'
     | '/parcours'
     | '/tableau-bord'
+    | '/admin/modules'
     | '/admin/questions'
     | '/lecon/$leconId'
     | '/admin'
@@ -151,6 +163,7 @@ export interface FileRouteTypes {
     | '/_authenticated/examen-blanc'
     | '/_authenticated/parcours'
     | '/_authenticated/tableau-bord'
+    | '/_authenticated/admin/modules'
     | '/_authenticated/admin/questions'
     | '/_authenticated/lecon/$leconId'
     | '/_authenticated/admin/'
@@ -241,16 +254,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminQuestionsRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/modules': {
+      id: '/_authenticated/admin/modules'
+      path: '/modules'
+      fullPath: '/admin/modules'
+      preLoaderRoute: typeof AuthenticatedAdminModulesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminModulesRoute: typeof AuthenticatedAdminModulesRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminModulesRoute: AuthenticatedAdminModulesRoute,
     AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   }
