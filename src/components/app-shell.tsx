@@ -62,15 +62,16 @@ export function AppShell({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="h-1 bg-gradient-to-r from-primary via-white to-republic" />
-      <header className="border-b bg-card/80 backdrop-blur sticky top-0 z-50">
+    <div className="min-h-screen flex flex-col bg-background">
+      <header className="border-b border-border/60 bg-card/85 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto max-w-6xl px-4 h-16 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-md bg-gradient-republic flex items-center justify-center text-primary-foreground font-display font-bold">
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-display font-bold text-lg shadow-sm group-hover:shadow-md transition-shadow">
               C
             </div>
-            <span className="font-display text-xl font-semibold tracking-tight">Cap Citoyen</span>
+            <span className="font-display text-xl font-semibold tracking-tight text-foreground">
+              Cap Citoyen
+            </span>
           </Link>
 
           {user ? (
@@ -83,7 +84,14 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <NavLink to="/admin" icon={<Shield className="h-4 w-4" />}>Admin</NavLink>
               )}
             </nav>
-          ) : null}
+          ) : (
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+              <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
+              <Link to="/auth" className="hover:text-foreground transition-colors">Démarches</Link>
+              <Link to="/auth" className="hover:text-foreground transition-colors">Examen blanc</Link>
+              <Link to="/auth" className="hover:text-foreground transition-colors">À propos</Link>
+            </nav>
+          )}
 
           <div className="flex items-center gap-2">
             {user ? (
@@ -95,7 +103,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <Button variant="ghost" size="sm" asChild>
                   <Link to="/auth">Se connecter</Link>
                 </Button>
-                <Button variant="default" size="sm" asChild className="bg-gradient-republic">
+                <Button variant="default" size="sm" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm">
                   <Link to="/auth" search={{ mode: "signup" }}>S'inscrire</Link>
                 </Button>
               </>
@@ -103,7 +111,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </div>
         {user && (
-          <div className="md:hidden border-t">
+          <div className="md:hidden border-t border-border/60">
             <div className="container mx-auto max-w-6xl px-4 py-2 flex flex-wrap gap-1 text-xs">
               <NavLink to="/tableau-bord" icon={<LayoutDashboard className="h-3 w-3" />}>Bord</NavLink>
               <NavLink to="/parcours" icon={<BookOpen className="h-3 w-3" />}>Parcours</NavLink>
