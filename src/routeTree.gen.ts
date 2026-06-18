@@ -19,6 +19,7 @@ import { Route as AuthenticatedChecklistRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedLeconLeconIdRouteImport } from './routes/_authenticated/lecon.$leconId'
+import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated/admin/questions'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -72,6 +73,12 @@ const AuthenticatedLeconLeconIdRoute =
     path: '/lecon/$leconId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminQuestionsRoute =
+  AuthenticatedAdminQuestionsRouteImport.update({
+    id: '/questions',
+    path: '/questions',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -91,6 +99,7 @@ export interface FileRoutesByTo {
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
@@ -104,6 +113,7 @@ export interface FileRoutesById {
   '/_authenticated/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/_authenticated/parcours': typeof AuthenticatedParcoursRoute
   '/_authenticated/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/_authenticated/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/_authenticated/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/examen-blanc'
     | '/parcours'
     | '/tableau-bord'
+    | '/admin/questions'
     | '/lecon/$leconId'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/examen-blanc'
     | '/parcours'
     | '/tableau-bord'
+    | '/admin/questions'
     | '/lecon/$leconId'
     | '/admin'
   id:
@@ -139,6 +151,7 @@ export interface FileRouteTypes {
     | '/_authenticated/examen-blanc'
     | '/_authenticated/parcours'
     | '/_authenticated/tableau-bord'
+    | '/_authenticated/admin/questions'
     | '/_authenticated/lecon/$leconId'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
@@ -221,15 +234,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLeconLeconIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/questions': {
+      id: '/_authenticated/admin/questions'
+      path: '/questions'
+      fullPath: '/admin/questions'
+      preLoaderRoute: typeof AuthenticatedAdminQuestionsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   }
 
