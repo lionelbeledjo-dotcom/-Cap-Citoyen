@@ -199,3 +199,8 @@
       oklch(0.55 0.21 25) 100%
     ) 1;
 }
+
+@utility hero-pattern {
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 1px, transparent 1px 14px);
+}
