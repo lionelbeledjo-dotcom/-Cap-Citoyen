@@ -63,7 +63,7 @@ function Landing() {
                   size="lg"
                   className="bg-white text-primary hover:bg-white shadow-elegant hover:scale-[1.02] transition-all duration-200"
                 >
-                  <Link to="/auth" search={{ mode: "signup" }}>
+                  <Link to="/inscription">
                     Commencer mon parcours
                   </Link>
                 </Button>
@@ -73,7 +73,7 @@ function Landing() {
                   variant="outline"
                   className="border-2 border-white/70 bg-transparent text-white hover:bg-white/10 hover:text-white hover:border-white transition-all"
                 >
-                  <Link to="/auth">Se connecter</Link>
+                  <Link to="/connexion">Se connecter</Link>
                 </Button>
               </div>
 

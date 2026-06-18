@@ -9,22 +9,57 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
+import { Route as InscriptionRouteImport } from './routes/inscription'
+import { Route as DemarchesRouteImport } from './routes/demarches'
+import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedTableauDeBordRouteImport } from './routes/_authenticated/tableau-de-bord'
 import { Route as AuthenticatedTableauBordRouteImport } from './routes/_authenticated/tableau-bord'
+import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as AuthenticatedParcoursRouteImport } from './routes/_authenticated/parcours'
+import { Route as AuthenticatedModulesRouteImport } from './routes/_authenticated/modules'
 import { Route as AuthenticatedExamenBlancRouteImport } from './routes/_authenticated/examen-blanc'
 import { Route as AuthenticatedChecklistRouteImport } from './routes/_authenticated/checklist'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedQuizModuleIdRouteImport } from './routes/_authenticated/quiz.$moduleId'
+import { Route as AuthenticatedModulesIdRouteImport } from './routes/_authenticated/modules.$id'
 import { Route as AuthenticatedLeconLeconIdRouteImport } from './routes/_authenticated/lecon.$leconId'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated/admin/questions'
 import { Route as AuthenticatedAdminModulesRouteImport } from './routes/_authenticated/admin/modules'
 
+const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
+  id: '/mot-de-passe-oublie',
+  path: '/mot-de-passe-oublie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InscriptionRoute = InscriptionRouteImport.update({
+  id: '/inscription',
+  path: '/inscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemarchesRoute = DemarchesRouteImport.update({
+  id: '/demarches',
+  path: '/demarches',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -36,15 +71,31 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedTableauDeBordRoute =
+  AuthenticatedTableauDeBordRouteImport.update({
+    id: '/tableau-de-bord',
+    path: '/tableau-de-bord',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTableauBordRoute =
   AuthenticatedTableauBordRouteImport.update({
     id: '/tableau-bord',
     path: '/tableau-bord',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedParcoursRoute = AuthenticatedParcoursRouteImport.update({
   id: '/parcours',
   path: '/parcours',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedModulesRoute = AuthenticatedModulesRouteImport.update({
+  id: '/modules',
+  path: '/modules',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedExamenBlancRoute =
@@ -68,6 +119,17 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedQuizModuleIdRoute =
+  AuthenticatedQuizModuleIdRouteImport.update({
+    id: '/quiz/$moduleId',
+    path: '/quiz/$moduleId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedModulesIdRoute = AuthenticatedModulesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedModulesRoute,
+} as any)
 const AuthenticatedLeconLeconIdRoute =
   AuthenticatedLeconLeconIdRouteImport.update({
     id: '/lecon/$leconId',
@@ -89,99 +151,199 @@ const AuthenticatedAdminModulesRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
+  '/connexion': typeof ConnexionRoute
+  '/demarches': typeof DemarchesRoute
+  '/inscription': typeof InscriptionRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/checklist': typeof AuthenticatedChecklistRoute
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
+  '/modules': typeof AuthenticatedModulesRouteWithChildren
   '/parcours': typeof AuthenticatedParcoursRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
   '/admin/modules': typeof AuthenticatedAdminModulesRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
+  '/modules/$id': typeof AuthenticatedModulesIdRoute
+  '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
+  '/connexion': typeof ConnexionRoute
+  '/demarches': typeof DemarchesRoute
+  '/inscription': typeof InscriptionRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/checklist': typeof AuthenticatedChecklistRoute
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
+  '/modules': typeof AuthenticatedModulesRouteWithChildren
   '/parcours': typeof AuthenticatedParcoursRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
   '/admin/modules': typeof AuthenticatedAdminModulesRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
+  '/modules/$id': typeof AuthenticatedModulesIdRoute
+  '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
+  '/connexion': typeof ConnexionRoute
+  '/demarches': typeof DemarchesRoute
+  '/inscription': typeof InscriptionRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/checklist': typeof AuthenticatedChecklistRoute
   '/_authenticated/examen-blanc': typeof AuthenticatedExamenBlancRoute
+  '/_authenticated/modules': typeof AuthenticatedModulesRouteWithChildren
   '/_authenticated/parcours': typeof AuthenticatedParcoursRoute
+  '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/_authenticated/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
   '/_authenticated/admin/modules': typeof AuthenticatedAdminModulesRoute
   '/_authenticated/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/_authenticated/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
+  '/_authenticated/modules/$id': typeof AuthenticatedModulesIdRoute
+  '/_authenticated/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/a-propos'
     | '/auth'
+    | '/connexion'
+    | '/demarches'
+    | '/inscription'
+    | '/mot-de-passe-oublie'
     | '/admin'
     | '/checklist'
     | '/examen-blanc'
+    | '/modules'
     | '/parcours'
+    | '/profil'
     | '/tableau-bord'
+    | '/tableau-de-bord'
     | '/admin/modules'
     | '/admin/questions'
     | '/lecon/$leconId'
+    | '/modules/$id'
+    | '/quiz/$moduleId'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/a-propos'
     | '/auth'
+    | '/connexion'
+    | '/demarches'
+    | '/inscription'
+    | '/mot-de-passe-oublie'
     | '/checklist'
     | '/examen-blanc'
+    | '/modules'
     | '/parcours'
+    | '/profil'
     | '/tableau-bord'
+    | '/tableau-de-bord'
     | '/admin/modules'
     | '/admin/questions'
     | '/lecon/$leconId'
+    | '/modules/$id'
+    | '/quiz/$moduleId'
     | '/admin'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/a-propos'
     | '/auth'
+    | '/connexion'
+    | '/demarches'
+    | '/inscription'
+    | '/mot-de-passe-oublie'
     | '/_authenticated/admin'
     | '/_authenticated/checklist'
     | '/_authenticated/examen-blanc'
+    | '/_authenticated/modules'
     | '/_authenticated/parcours'
+    | '/_authenticated/profil'
     | '/_authenticated/tableau-bord'
+    | '/_authenticated/tableau-de-bord'
     | '/_authenticated/admin/modules'
     | '/_authenticated/admin/questions'
     | '/_authenticated/lecon/$leconId'
+    | '/_authenticated/modules/$id'
+    | '/_authenticated/quiz/$moduleId'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AProposRoute: typeof AProposRoute
   AuthRoute: typeof AuthRoute
+  ConnexionRoute: typeof ConnexionRoute
+  DemarchesRoute: typeof DemarchesRoute
+  InscriptionRoute: typeof InscriptionRoute
+  MotDePasseOublieRoute: typeof MotDePasseOublieRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/mot-de-passe-oublie': {
+      id: '/mot-de-passe-oublie'
+      path: '/mot-de-passe-oublie'
+      fullPath: '/mot-de-passe-oublie'
+      preLoaderRoute: typeof MotDePasseOublieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inscription': {
+      id: '/inscription'
+      path: '/inscription'
+      fullPath: '/inscription'
+      preLoaderRoute: typeof InscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demarches': {
+      id: '/demarches'
+      path: '/demarches'
+      fullPath: '/demarches'
+      preLoaderRoute: typeof DemarchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -198,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/tableau-de-bord': {
+      id: '/_authenticated/tableau-de-bord'
+      path: '/tableau-de-bord'
+      fullPath: '/tableau-de-bord'
+      preLoaderRoute: typeof AuthenticatedTableauDeBordRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/tableau-bord': {
       id: '/_authenticated/tableau-bord'
       path: '/tableau-bord'
@@ -205,11 +374,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTableauBordRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profil': {
+      id: '/_authenticated/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof AuthenticatedProfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/parcours': {
       id: '/_authenticated/parcours'
       path: '/parcours'
       fullPath: '/parcours'
       preLoaderRoute: typeof AuthenticatedParcoursRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/modules': {
+      id: '/_authenticated/modules'
+      path: '/modules'
+      fullPath: '/modules'
+      preLoaderRoute: typeof AuthenticatedModulesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/examen-blanc': {
@@ -239,6 +422,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/quiz/$moduleId': {
+      id: '/_authenticated/quiz/$moduleId'
+      path: '/quiz/$moduleId'
+      fullPath: '/quiz/$moduleId'
+      preLoaderRoute: typeof AuthenticatedQuizModuleIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/modules/$id': {
+      id: '/_authenticated/modules/$id'
+      path: '/$id'
+      fullPath: '/modules/$id'
+      preLoaderRoute: typeof AuthenticatedModulesIdRouteImport
+      parentRoute: typeof AuthenticatedModulesRoute
     }
     '/_authenticated/lecon/$leconId': {
       id: '/_authenticated/lecon/$leconId'
@@ -282,22 +479,41 @@ const AuthenticatedAdminRouteRouteWithChildren =
     AuthenticatedAdminRouteRouteChildren,
   )
 
+interface AuthenticatedModulesRouteChildren {
+  AuthenticatedModulesIdRoute: typeof AuthenticatedModulesIdRoute
+}
+
+const AuthenticatedModulesRouteChildren: AuthenticatedModulesRouteChildren = {
+  AuthenticatedModulesIdRoute: AuthenticatedModulesIdRoute,
+}
+
+const AuthenticatedModulesRouteWithChildren =
+  AuthenticatedModulesRoute._addFileChildren(AuthenticatedModulesRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedChecklistRoute: typeof AuthenticatedChecklistRoute
   AuthenticatedExamenBlancRoute: typeof AuthenticatedExamenBlancRoute
+  AuthenticatedModulesRoute: typeof AuthenticatedModulesRouteWithChildren
   AuthenticatedParcoursRoute: typeof AuthenticatedParcoursRoute
+  AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedTableauBordRoute: typeof AuthenticatedTableauBordRoute
+  AuthenticatedTableauDeBordRoute: typeof AuthenticatedTableauDeBordRoute
   AuthenticatedLeconLeconIdRoute: typeof AuthenticatedLeconLeconIdRoute
+  AuthenticatedQuizModuleIdRoute: typeof AuthenticatedQuizModuleIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedChecklistRoute: AuthenticatedChecklistRoute,
   AuthenticatedExamenBlancRoute: AuthenticatedExamenBlancRoute,
+  AuthenticatedModulesRoute: AuthenticatedModulesRouteWithChildren,
   AuthenticatedParcoursRoute: AuthenticatedParcoursRoute,
+  AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedTableauBordRoute: AuthenticatedTableauBordRoute,
+  AuthenticatedTableauDeBordRoute: AuthenticatedTableauDeBordRoute,
   AuthenticatedLeconLeconIdRoute: AuthenticatedLeconLeconIdRoute,
+  AuthenticatedQuizModuleIdRoute: AuthenticatedQuizModuleIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -306,18 +522,13 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AProposRoute: AProposRoute,
   AuthRoute: AuthRoute,
+  ConnexionRoute: ConnexionRoute,
+  DemarchesRoute: DemarchesRoute,
+  InscriptionRoute: InscriptionRoute,
+  MotDePasseOublieRoute: MotDePasseOublieRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
