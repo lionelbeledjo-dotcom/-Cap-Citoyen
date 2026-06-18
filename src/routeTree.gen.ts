@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTableauBordRouteImport } from './routes/_authenticated/tableau-bord'
 import { Route as AuthenticatedParcoursRouteImport } from './routes/_authenticated/parcours'
 import { Route as AuthenticatedExamenBlancRouteImport } from './routes/_authenticated/examen-blanc'
+import { Route as AuthenticatedChecklistRouteImport } from './routes/_authenticated/checklist'
 import { Route as AuthenticatedLeconLeconIdRouteImport } from './routes/_authenticated/lecon.$leconId'
 
 const AuthRoute = AuthRouteImport.update({
@@ -48,6 +49,11 @@ const AuthenticatedExamenBlancRoute =
     path: '/examen-blanc',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedChecklistRoute = AuthenticatedChecklistRouteImport.update({
+  id: '/checklist',
+  path: '/checklist',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedLeconLeconIdRoute =
   AuthenticatedLeconLeconIdRouteImport.update({
     id: '/lecon/$leconId',
@@ -58,6 +64,7 @@ const AuthenticatedLeconLeconIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/checklist': typeof AuthenticatedChecklistRoute
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/checklist': typeof AuthenticatedChecklistRoute
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/checklist': typeof AuthenticatedChecklistRoute
   '/_authenticated/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/_authenticated/parcours': typeof AuthenticatedParcoursRoute
   '/_authenticated/tableau-bord': typeof AuthenticatedTableauBordRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/checklist'
     | '/examen-blanc'
     | '/parcours'
     | '/tableau-bord'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/checklist'
     | '/examen-blanc'
     | '/parcours'
     | '/tableau-bord'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/checklist'
     | '/_authenticated/examen-blanc'
     | '/_authenticated/parcours'
     | '/_authenticated/tableau-bord'
@@ -159,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedExamenBlancRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/checklist': {
+      id: '/_authenticated/checklist'
+      path: '/checklist'
+      fullPath: '/checklist'
+      preLoaderRoute: typeof AuthenticatedChecklistRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/lecon/$leconId': {
       id: '/_authenticated/lecon/$leconId'
       path: '/lecon/$leconId'
@@ -170,6 +189,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedChecklistRoute: typeof AuthenticatedChecklistRoute
   AuthenticatedExamenBlancRoute: typeof AuthenticatedExamenBlancRoute
   AuthenticatedParcoursRoute: typeof AuthenticatedParcoursRoute
   AuthenticatedTableauBordRoute: typeof AuthenticatedTableauBordRoute
@@ -177,6 +197,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedChecklistRoute: AuthenticatedChecklistRoute,
   AuthenticatedExamenBlancRoute: AuthenticatedExamenBlancRoute,
   AuthenticatedParcoursRoute: AuthenticatedParcoursRoute,
   AuthenticatedTableauBordRoute: AuthenticatedTableauBordRoute,
