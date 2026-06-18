@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTableauBordRouteImport } from './routes/_authenticated/tableau-bord'
 import { Route as AuthenticatedParcoursRouteImport } from './routes/_authenticated/parcours'
+import { Route as AuthenticatedExamenBlancRouteImport } from './routes/_authenticated/examen-blanc'
 import { Route as AuthenticatedLeconLeconIdRouteImport } from './routes/_authenticated/lecon.$leconId'
 
 const AuthRoute = AuthRouteImport.update({
@@ -41,6 +42,12 @@ const AuthenticatedParcoursRoute = AuthenticatedParcoursRouteImport.update({
   path: '/parcours',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedExamenBlancRoute =
+  AuthenticatedExamenBlancRouteImport.update({
+    id: '/examen-blanc',
+    path: '/examen-blanc',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLeconLeconIdRoute =
   AuthenticatedLeconLeconIdRouteImport.update({
     id: '/lecon/$leconId',
@@ -51,6 +58,7 @@ const AuthenticatedLeconLeconIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
@@ -67,20 +76,34 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/_authenticated/parcours': typeof AuthenticatedParcoursRoute
   '/_authenticated/tableau-bord': typeof AuthenticatedTableauBordRoute
   '/_authenticated/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/parcours' | '/tableau-bord' | '/lecon/$leconId'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/examen-blanc'
+    | '/parcours'
+    | '/tableau-bord'
+    | '/lecon/$leconId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/parcours' | '/tableau-bord' | '/lecon/$leconId'
+  to:
+    | '/'
+    | '/auth'
+    | '/examen-blanc'
+    | '/parcours'
+    | '/tableau-bord'
+    | '/lecon/$leconId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/examen-blanc'
     | '/_authenticated/parcours'
     | '/_authenticated/tableau-bord'
     | '/_authenticated/lecon/$leconId'
@@ -129,6 +152,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedParcoursRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/examen-blanc': {
+      id: '/_authenticated/examen-blanc'
+      path: '/examen-blanc'
+      fullPath: '/examen-blanc'
+      preLoaderRoute: typeof AuthenticatedExamenBlancRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/lecon/$leconId': {
       id: '/_authenticated/lecon/$leconId'
       path: '/lecon/$leconId'
@@ -140,12 +170,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedExamenBlancRoute: typeof AuthenticatedExamenBlancRoute
   AuthenticatedParcoursRoute: typeof AuthenticatedParcoursRoute
   AuthenticatedTableauBordRoute: typeof AuthenticatedTableauBordRoute
   AuthenticatedLeconLeconIdRoute: typeof AuthenticatedLeconLeconIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedExamenBlancRoute: AuthenticatedExamenBlancRoute,
   AuthenticatedParcoursRoute: AuthenticatedParcoursRoute,
   AuthenticatedTableauBordRoute: AuthenticatedTableauBordRoute,
   AuthenticatedLeconLeconIdRoute: AuthenticatedLeconLeconIdRoute,
