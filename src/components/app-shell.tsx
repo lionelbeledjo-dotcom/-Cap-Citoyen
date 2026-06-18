@@ -86,25 +86,29 @@ export function AppShell({ children }: { children: ReactNode }) {
             </nav>
           ) : (
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-              <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
-              <Link to="/auth" className="hover:text-foreground transition-colors">Démarches</Link>
-              <Link to="/auth" className="hover:text-foreground transition-colors">Examen blanc</Link>
-              <Link to="/auth" className="hover:text-foreground transition-colors">À propos</Link>
+              <Link to="/" className="hover:text-foreground transition-colors focus-visible:text-foreground">Accueil</Link>
+              <Link to="/demarches" className="hover:text-foreground transition-colors focus-visible:text-foreground">Démarches</Link>
+              <Link to="/a-propos" className="hover:text-foreground transition-colors focus-visible:text-foreground">À propos</Link>
             </nav>
           )}
 
           <div className="flex items-center gap-2">
             {user ? (
-              <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                <LogOut className="h-4 w-4 mr-1" /> Quitter
-              </Button>
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/profil">Mon profil</Link>
+                </Button>
+                <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                  <LogOut className="h-4 w-4 mr-1" /> Se déconnecter
+                </Button>
+              </>
             ) : (
               <>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link to="/auth">Se connecter</Link>
+                  <Link to="/connexion">Se connecter</Link>
                 </Button>
                 <Button variant="default" size="sm" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm">
-                  <Link to="/auth" search={{ mode: "signup" }}>S'inscrire</Link>
+                  <Link to="/inscription">S'inscrire</Link>
                 </Button>
               </>
             )}
