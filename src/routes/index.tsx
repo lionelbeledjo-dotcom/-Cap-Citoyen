@@ -47,7 +47,7 @@ function Landing() {
                 </span>
                 Outil pédagogique — sources officielles
               </div>
-              <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight">
+              <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight tracking-tight">
                 Préparez sereinement votre{" "}
                 <span className="text-white">carte de résident</span> et votre{" "}
                 <span className="text-white">nationalité française</span>.
@@ -111,7 +111,7 @@ function Landing() {
       <section className="bg-background">
         <div className="container mx-auto max-w-6xl px-4 py-20">
           <div className="text-center max-w-2xl mx-auto">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold leading-tight tracking-tight text-foreground">
               Tout ce qu'il faut pour réussir
             </h2>
             <p className="mt-3 text-muted-foreground">
