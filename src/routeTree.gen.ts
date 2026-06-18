@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTableauBordRouteImport } from './routes/_authenticated/tableau-bord'
 import { Route as AuthenticatedParcoursRouteImport } from './routes/_authenticated/parcours'
+import { Route as AuthenticatedLeconLeconIdRouteImport } from './routes/_authenticated/lecon.$leconId'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -40,18 +41,26 @@ const AuthenticatedParcoursRoute = AuthenticatedParcoursRouteImport.update({
   path: '/parcours',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedLeconLeconIdRoute =
+  AuthenticatedLeconLeconIdRouteImport.update({
+    id: '/lecon/$leconId',
+    path: '/lecon/$leconId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/parcours': typeof AuthenticatedParcoursRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -60,12 +69,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/parcours': typeof AuthenticatedParcoursRoute
   '/_authenticated/tableau-bord': typeof AuthenticatedTableauBordRoute
+  '/_authenticated/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/parcours' | '/tableau-bord'
+  fullPaths: '/' | '/auth' | '/parcours' | '/tableau-bord' | '/lecon/$leconId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/parcours' | '/tableau-bord'
+  to: '/' | '/auth' | '/parcours' | '/tableau-bord' | '/lecon/$leconId'
   id:
     | '__root__'
     | '/'
@@ -73,6 +83,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/parcours'
     | '/_authenticated/tableau-bord'
+    | '/_authenticated/lecon/$leconId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,17 +129,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedParcoursRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/lecon/$leconId': {
+      id: '/_authenticated/lecon/$leconId'
+      path: '/lecon/$leconId'
+      fullPath: '/lecon/$leconId'
+      preLoaderRoute: typeof AuthenticatedLeconLeconIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedParcoursRoute: typeof AuthenticatedParcoursRoute
   AuthenticatedTableauBordRoute: typeof AuthenticatedTableauBordRoute
+  AuthenticatedLeconLeconIdRoute: typeof AuthenticatedLeconLeconIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedParcoursRoute: AuthenticatedParcoursRoute,
   AuthenticatedTableauBordRoute: AuthenticatedTableauBordRoute,
+  AuthenticatedLeconLeconIdRoute: AuthenticatedLeconLeconIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
