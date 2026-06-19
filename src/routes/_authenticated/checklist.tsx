@@ -87,23 +87,23 @@ function ChecklistFor({ type }: { type: "carte_resident" | "naturalisation" }) {
         .order("ordre");
       return data ?? [];
     },
+    enabled: !!user?.id,
   });
 
   useEffect(() => {
-    if (items && items.length === 0 && !seeding) {
-      setSeeding(true);
-      const rows = DEFAULTS[type].map((intitule, i) => ({
-        user_id: user!.id,
-        type_demarche: type,
-        intitule,
-        ordre: i,
-      }));
-      supabase.from("checklist_items").insert(rows).then(({ error }) => {
-        setSeeding(false);
-        if (error) toast.error(error.message);
-        qc.invalidateQueries({ queryKey: ["checklist", type] });
-      });
-    }
+    if (!user?.id || !items || items.length !== 0 || seeding) return;
+    setSeeding(true);
+    const rows = DEFAULTS[type].map((intitule, i) => ({
+      user_id: user.id,
+      type_demarche: type,
+      intitule,
+      ordre: i,
+    }));
+    supabase.from("checklist_items").insert(rows).then(({ error }) => {
+      setSeeding(false);
+      if (error) toast.error(error.message);
+      qc.invalidateQueries({ queryKey: ["checklist", type] });
+    });
   }, [items, type, user, qc, seeding]);
 
   const toggle = async (id: string, est_coche: boolean) => {

@@ -32,6 +32,7 @@ function LeconPage() {
     queryKey: ["prog", leconId, user?.id],
     queryFn: async () =>
       (await supabase.from("progression").select("statut").eq("user_id", user!.id).eq("lecon_id", leconId).maybeSingle()).data,
+    enabled: !!user?.id,
   });
 
   const marquerTermine = async () => {

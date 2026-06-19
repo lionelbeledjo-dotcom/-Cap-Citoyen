@@ -14,22 +14,35 @@ export const Route = createFileRoute("/_authenticated/tableau-bord")({
 });
 
 function Dashboard() {
-  const { user } = useAuth();
-  const uid = user!.id;
+  const { user, loading } = useAuth();
+  const uid = user?.id;
 
   const { data: lecons } = useQuery({
     queryKey: ["lecons-all"],
     queryFn: async () => (await supabase.from("lecons").select("id, titre, module_id, ordre").order("ordre")).data ?? [],
+    enabled: !!uid,
   });
   const { data: progression } = useQuery({
     queryKey: ["progression", uid],
-    queryFn: async () => (await supabase.from("progression").select("lecon_id, statut").eq("user_id", uid)).data ?? [],
+    queryFn: async () => (await supabase.from("progression").select("lecon_id, statut").eq("user_id", uid!)).data ?? [],
+    enabled: !!uid,
   });
   const { data: tentatives } = useQuery({
     queryKey: ["tentatives", uid],
     queryFn: async () =>
-      (await supabase.from("quiz_tentatives").select("score, total, date").eq("user_id", uid).order("date", { ascending: true })).data ?? [],
+      (await supabase.from("quiz_tentatives").select("score, total, date").eq("user_id", uid!).order("date", { ascending: true })).data ?? [],
+    enabled: !!uid,
   });
+
+  if (loading || !user) {
+    return (
+      <AppShell>
+        <div className="container mx-auto max-w-6xl px-4 py-10">
+          <p className="text-muted-foreground">Chargement…</p>
+        </div>
+      </AppShell>
+    );
+  }
 
   const total = lecons?.length ?? 0;
   const done = progression?.filter((p) => p.statut === "termine").length ?? 0;

@@ -34,6 +34,7 @@ function ParcoursPage() {
     queryKey: ["progression", user?.id],
     queryFn: async () =>
       (await supabase.from("progression").select("lecon_id, statut").eq("user_id", user!.id)).data ?? [],
+    enabled: !!user?.id,
   });
 
   return (

@@ -87,7 +87,7 @@ function ExamenBlanc() {
   );
 
   useEffect(() => {
-    if (phase !== "result" || questions.length === 0) return;
+    if (phase !== "result" || questions.length === 0 || !user?.id) return;
     const details = questions.map((q) => ({
       question_id: q.id,
       enonce: q.enonce,
@@ -95,7 +95,7 @@ function ExamenBlanc() {
       correct: q.bonne_reponse,
     }));
     supabase.from("quiz_tentatives").insert({
-      user_id: user!.id,
+      user_id: user.id,
       score,
       total: questions.length,
       details_json: details as any,

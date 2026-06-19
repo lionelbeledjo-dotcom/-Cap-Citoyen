@@ -98,13 +98,15 @@ function QuizPage() {
         choisi: answers[q.id] ?? selected,
         correct: q.bonne_reponse,
       }));
-      supabase.from("quiz_tentatives").insert({
-        user_id: user!.id,
-        module_id: moduleId,
-        score,
-        total: questions.length,
-        details_json: details as any,
-      });
+      if (user?.id) {
+        supabase.from("quiz_tentatives").insert({
+          user_id: user.id,
+          module_id: moduleId,
+          score,
+          total: questions.length,
+          details_json: details as any,
+        });
+      }
       return;
     }
     setCurrent((c) => c + 1);

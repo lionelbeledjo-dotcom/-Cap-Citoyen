@@ -29,6 +29,14 @@ export function useAuth() {
       return;
     }
     supabase
+      .from("profiles")
+      .upsert(
+        { id: user.id, email: user.email ?? "", nom: user.user_metadata?.nom ?? user.email?.split("@")[0] ?? "" },
+        { onConflict: "id" }
+      )
+      .then(() => {});
+
+    supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", user.id)
