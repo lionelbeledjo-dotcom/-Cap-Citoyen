@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { AppShell } from "@/components/app-shell";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 import {
   BookOpen,
   GraduationCap,
@@ -16,6 +18,10 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: async () => {
+    const { data } = await supabase.auth.getUser();
+    if (data.user) throw redirect({ to: "/tableau-bord" });
+  },
   head: () => ({
     meta: [
       { title: "Cap Citoyen — Préparez votre carte de résident et la nationalité française" },
@@ -30,6 +36,18 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <AppShell>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      </AppShell>
+    );
+  }
+
   return (
     <AppShell>
       {/* HERO */}
@@ -58,23 +76,37 @@ function Landing() {
                 rythme.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-white text-primary hover:bg-white shadow-elegant hover:scale-[1.02] transition-all duration-200"
-                >
-                  <Link to="/inscription">
-                    Commencer mon parcours
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-white/70 bg-transparent text-white hover:bg-white/10 hover:text-white hover:border-white transition-all"
-                >
-                  <Link to="/connexion">Se connecter</Link>
-                </Button>
+                {user ? (
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-white text-primary hover:bg-white shadow-elegant hover:scale-[1.02] transition-all duration-200"
+                  >
+                    <Link to="/tableau-bord">
+                      Accéder à mon tableau de bord
+                    </Link>
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      asChild
+                      size="lg"
+                      className="bg-white text-primary hover:bg-white shadow-elegant hover:scale-[1.02] transition-all duration-200"
+                    >
+                      <Link to="/inscription">
+                        Commencer mon parcours
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      size="lg"
+                      variant="outline"
+                      className="border-2 border-white/70 bg-transparent text-white hover:bg-white/10 hover:text-white hover:border-white transition-all"
+                    >
+                      <Link to="/connexion">Se connecter</Link>
+                    </Button>
+                  </>
+                )}
               </div>
 
               {/* TRUST BAR */}
