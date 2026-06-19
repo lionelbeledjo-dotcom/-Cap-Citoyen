@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Plus, Pencil, Trash2, Search, Upload, Database } from "lucide-react";
 import seedBase from "../../../../seed-questions.json";
 import seedExtra from "../../../../seed-questions-extra.json";
+import seedCivique74 from "../../../../seed-questions-civique-74.json";
 
 export const Route = createFileRoute("/_authenticated/admin/questions")({
   component: AdminQuestions,
@@ -102,15 +103,32 @@ function AdminQuestions() {
   };
 
   const seedAll = async () => {
-    if (!confirm("Insérer les 88 questions d'entraînement ? (ignoré si déjà présentes)")) return;
-    const all = [...seedBase, ...seedExtra];
-    const { error, count } = await supabase.from("questions").insert(all as any, { count: "exact" });
-    if (error) {
-      if (error.code === "23505") toast.info("Des questions existent déjà.");
-      else toast.error(error.message);
+    if (!confirm("Insérer les questions d'entraînement ? (doublons ignorés)")) return;
+    const modCivique = modules?.find((m: any) => m.categorie === "examen_civique");
+    if (!modCivique) {
+      toast.error("Module 'Examen civique' introuvable. Créez-le d'abord.");
       return;
     }
-    toast.success(`${count} questions insérées !`);
+    const existingEnonces = new Set((questions ?? []).map((q: any) => q.enonce));
+    const civique74 = (seedCivique74 as any[]).map((q) => ({ ...q, module_id: modCivique.id }));
+    const all = [...seedBase, ...seedExtra, ...civique74].filter((q) => !existingEnonces.has(q.enonce));
+    if (all.length === 0) {
+      toast.info("Toutes les questions sont déjà en base.");
+      return;
+    }
+    let inserted = 0;
+    const batch = 50;
+    for (let i = 0; i < all.length; i += batch) {
+      const chunk = all.slice(i, i + batch);
+      const { error, count } = await supabase.from("questions").insert(chunk as any, { count: "exact" });
+      if (error) {
+        if (error.code === "23505") continue;
+        toast.error(error.message);
+        break;
+      }
+      inserted += count ?? chunk.length;
+    }
+    toast.success(`${inserted} questions insérées !`);
     qc.invalidateQueries({ queryKey: ["admin-questions"] });
   };
 
@@ -139,11 +157,9 @@ function AdminQuestions() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="font-display text-3xl font-bold">Questions ({filtered.length})</h1>
           <div className="flex gap-2">
-            {(questions?.length ?? 0) === 0 && (
-              <Button variant="outline" onClick={seedAll}>
-                <Database className="h-4 w-4 mr-1" /> Peupler (88 questions)
-              </Button>
-            )}
+            <Button variant="outline" onClick={seedAll}>
+              <Database className="h-4 w-4 mr-1" /> Peupler les questions
+            </Button>
             <Button variant="outline" onClick={() => setImportOpen(true)}>
               <Upload className="h-4 w-4 mr-1" /> Import JSON
             </Button>
