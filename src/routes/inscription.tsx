@@ -31,7 +31,7 @@ function InscriptionPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: "/tableau-de-bord" });
+    if (!loading && user) navigate({ to: "/tableau-bord" });
   }, [user, loading, navigate]);
 
   const submit = async (e: React.FormEvent) => {
@@ -50,7 +50,7 @@ function InscriptionPage() {
       password,
       options: {
         data: { nom },
-        emailRedirectTo: `${window.location.origin}/tableau-de-bord`,
+        emailRedirectTo: `${window.location.origin}/tableau-bord`,
       },
     });
     setSubmitting(false);
@@ -62,7 +62,7 @@ function InscriptionPage() {
     }
     if (data.session) {
       toast.success("Compte créé !");
-      navigate({ to: "/tableau-de-bord" });
+      navigate({ to: "/tableau-bord" });
     } else {
       toast.success("Vérifiez votre email pour activer votre compte.");
       navigate({ to: "/connexion" });

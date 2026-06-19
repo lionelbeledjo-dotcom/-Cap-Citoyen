@@ -88,11 +88,17 @@ function ExamenBlanc() {
 
   useEffect(() => {
     if (phase !== "result" || questions.length === 0) return;
+    const details = questions.map((q) => ({
+      question_id: q.id,
+      enonce: q.enonce,
+      choisi: answers[q.id] ?? null,
+      correct: q.bonne_reponse,
+    }));
     supabase.from("quiz_tentatives").insert({
       user_id: user!.id,
       score,
       total: questions.length,
-      details_json: answers as any,
+      details_json: details as any,
     }).then(({ error }) => {
       if (error) toast.error(error.message);
     });

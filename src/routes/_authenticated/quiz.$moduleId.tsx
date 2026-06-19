@@ -44,6 +44,7 @@ function QuizPage() {
   const [validated, setValidated] = useState(false);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
 
   const { data: allQuestions } = useQuery({
     queryKey: ["quiz-questions", moduleId],
@@ -75,12 +76,14 @@ function QuizPage() {
     setSelected(null);
     setValidated(false);
     setFinished(false);
+    setAnswers({});
     setStarted(true);
   };
 
   const validate = () => {
     if (!selected) return;
     setValidated(true);
+    setAnswers((a) => ({ ...a, [questions[current].id]: selected }));
     if (selected === questions[current].bonne_reponse) {
       setScore((s) => s + 1);
     }
@@ -89,11 +92,18 @@ function QuizPage() {
   const next = () => {
     if (current + 1 >= questions.length) {
       setFinished(true);
+      const details = questions.map((q) => ({
+        question_id: q.id,
+        enonce: q.enonce,
+        choisi: answers[q.id] ?? selected,
+        correct: q.bonne_reponse,
+      }));
       supabase.from("quiz_tentatives").insert({
         user_id: user!.id,
         module_id: moduleId,
         score,
         total: questions.length,
+        details_json: details as any,
       });
       return;
     }

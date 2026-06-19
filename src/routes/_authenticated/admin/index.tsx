@@ -16,7 +16,7 @@ function AdminHome() {
       const [{ count: profilesC }, { count: questionsC }, { data: tentatives }] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }),
         supabase.from("questions").select("*", { count: "exact", head: true }),
-        supabase.from("quiz_tentatives").select("score, total"),
+        supabase.from("quiz_tentatives").select("score, total, details_json"),
       ]);
       const totalTent = tentatives?.length ?? 0;
       const avgPct = totalTent
@@ -25,7 +25,21 @@ function AdminHome() {
           )
         : 0;
       const reussis = tentatives?.filter((t) => t.score / t.total >= 0.8).length ?? 0;
-      return { profilesC, questionsC, totalTent, avgPct, reussis };
+
+      const errorMap: Record<string, { enonce: string; errors: number }> = {};
+      tentatives?.forEach((t: any) => {
+        if (!t.details_json || !Array.isArray(t.details_json)) return;
+        t.details_json.forEach((d: any) => {
+          if (d.choisi !== d.correct) {
+            const key = d.question_id ?? d.enonce ?? "";
+            if (!errorMap[key]) errorMap[key] = { enonce: d.enonce ?? key, errors: 0 };
+            errorMap[key].errors++;
+          }
+        });
+      });
+      const topErrors = Object.values(errorMap).sort((a, b) => b.errors - a.errors).slice(0, 5);
+
+      return { profilesC, questionsC, totalTent, avgPct, reussis, topErrors };
     },
   });
 
@@ -40,6 +54,20 @@ function AdminHome() {
           <Stat icon={<Trophy />} label="Tentatives d'examen" value={stats?.totalTent ?? "…"} />
           <Stat icon={<AlertTriangle />} label="Taux de réussite moyen" value={stats ? `${stats.avgPct} %` : "…"} />
         </div>
+
+        {stats?.topErrors && stats.topErrors.length > 0 && (
+          <Card>
+            <CardHeader><CardTitle className="font-display text-lg">Questions les plus échouées</CardTitle></CardHeader>
+            <CardContent className="space-y-2">
+              {stats.topErrors.map((e, i) => (
+                <div key={i} className="flex items-center justify-between text-sm gap-2">
+                  <span className="truncate flex-1">{e.enonce}</span>
+                  <span className="text-destructive font-medium whitespace-nowrap">{e.errors} erreur{e.errors > 1 ? "s" : ""}</span>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
         <Card>
           <CardHeader><CardTitle className="font-display text-lg">Recommandations</CardTitle></CardHeader>

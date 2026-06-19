@@ -29,7 +29,7 @@ function ConnexionPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: "/tableau-de-bord" });
+    if (!loading && user) navigate({ to: "/tableau-bord" });
   }, [user, loading, navigate]);
 
   const submit = async (e: React.FormEvent) => {
@@ -50,7 +50,7 @@ function ConnexionPage() {
       return;
     }
     toast.success("Connecté !");
-    navigate({ to: "/tableau-de-bord" });
+    navigate({ to: "/tableau-bord" });
   };
 
   return (
