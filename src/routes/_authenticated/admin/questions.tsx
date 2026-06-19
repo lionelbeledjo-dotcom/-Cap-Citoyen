@@ -16,6 +16,7 @@ import { Plus, Pencil, Trash2, Search, Upload, Database } from "lucide-react";
 import seedBase from "../../../../seed-questions.json";
 import seedExtra from "../../../../seed-questions-extra.json";
 import seedCivique74 from "../../../../seed-questions-civique-74.json";
+import seedComplement106 from "../../../../seed-questions-complement-106.json";
 
 export const Route = createFileRoute("/_authenticated/admin/questions")({
   component: AdminQuestions,
@@ -105,13 +106,34 @@ function AdminQuestions() {
   const seedAll = async () => {
     if (!confirm("Insérer les questions d'entraînement ? (doublons ignorés)")) return;
     const modCivique = modules?.find((m: any) => m.categorie === "examen_civique");
-    if (!modCivique) {
-      toast.error("Module 'Examen civique' introuvable. Créez-le d'abord.");
+    const modLangue = modules?.find((m: any) => m.categorie === "langue");
+    const modCarte = modules?.find((m: any) => m.categorie === "carte_resident");
+    const modNat = modules?.find((m: any) => m.categorie === "naturalisation");
+    if (!modCivique || !modLangue || !modCarte || !modNat) {
+      toast.error("Un ou plusieurs modules introuvables (examen_civique, langue, carte_resident, naturalisation).");
       return;
     }
+    const catToId: Record<string, string> = {
+      examen_civique: modCivique.id,
+      langue: modLangue.id,
+      carte_resident: modCarte.id,
+      naturalisation: modNat.id,
+    };
+    const diffMap: Record<string, number> = { facile: 1, moyen: 2, difficile: 3 };
     const existingEnonces = new Set((questions ?? []).map((q: any) => q.enonce));
     const civique74 = (seedCivique74 as any[]).map((q) => ({ ...q, module_id: modCivique.id }));
-    const all = [...seedBase, ...seedExtra, ...civique74].filter((q) => !existingEnonces.has(q.enonce));
+    const complement106 = (seedComplement106 as any[]).map((q) => ({
+      module_id: catToId[q.module_categorie] ?? modCivique.id,
+      enonce: q.enonce,
+      type: q.type,
+      options_json: q.options_json,
+      bonne_reponse: q.bonne_reponse,
+      explication: q.explication,
+      source_officielle: q.source_officielle,
+      date_verification: q.date_verification,
+      difficulte: typeof q.difficulte === "string" ? (diffMap[q.difficulte] ?? 2) : q.difficulte,
+    }));
+    const all = [...seedBase, ...seedExtra, ...civique74, ...complement106].filter((q) => !existingEnonces.has(q.enonce));
     if (all.length === 0) {
       toast.info("Toutes les questions sont déjà en base.");
       return;

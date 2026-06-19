@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Trophy, XCircle, CheckCircle2, Clock, GraduationCap, RefreshCw } from "lucide-react";
+import { Trophy, XCircle, CheckCircle2, Clock, GraduationCap, RefreshCw, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/examen-blanc")({
   component: ExamenBlanc,
@@ -44,6 +44,8 @@ function ExamenBlanc() {
   const [questions, setQuestions] = useState<Q[]>([]);
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [selected, setSelected] = useState<string | null>(null);
+  const [validated, setValidated] = useState(false);
   const [remaining, setRemaining] = useState(DUREE_MIN * 60);
 
   const { data: allQuestions } = useQuery({
@@ -63,6 +65,8 @@ function ExamenBlanc() {
     setQuestions(picked);
     setAnswers({});
     setCurrent(0);
+    setSelected(null);
+    setValidated(false);
     setRemaining(DUREE_MIN * 60);
     setPhase("test");
   };
@@ -137,10 +141,27 @@ function ExamenBlanc() {
     );
   }
 
+  const validate = () => {
+    if (!selected) return;
+    setValidated(true);
+    setAnswers((a) => ({ ...a, [questions[current].id]: selected }));
+  };
+
+  const next = () => {
+    if (current + 1 >= questions.length) {
+      setPhase("result");
+      return;
+    }
+    setCurrent((c) => c + 1);
+    setSelected(null);
+    setValidated(false);
+  };
+
   if (phase === "test") {
     const q = questions[current];
     const mins = Math.floor(remaining / 60);
     const secs = remaining % 60;
+    const isCorrect = selected === q.bonne_reponse;
     return (
       <AppShell>
         <div className="container mx-auto max-w-3xl px-4 py-8 space-y-4">
@@ -153,29 +174,56 @@ function ExamenBlanc() {
             <CardContent className="p-6 space-y-4">
               <p className="font-medium text-lg">{q.enonce}</p>
               <div className="space-y-2">
-                {(q.options_json as string[]).map((opt, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setAnswers((a) => ({ ...a, [q.id]: opt }))}
-                    className={`w-full text-left p-3 rounded-md border-2 transition ${
-                      answers[q.id] === opt ? "border-primary bg-primary/5" : "border-border hover:border-primary/40"
-                    }`}
-                  >
-                    {opt}
-                  </button>
-                ))}
+                {(q.options_json as string[]).map((opt, i) => {
+                  let style = "border-border hover:border-primary/40";
+                  if (validated) {
+                    if (opt === q.bonne_reponse) style = "border-success bg-success/10";
+                    else if (opt === selected) style = "border-destructive bg-destructive/10";
+                  } else if (opt === selected) {
+                    style = "border-primary bg-primary/5";
+                  }
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      disabled={validated}
+                      onClick={() => setSelected(opt)}
+                      className={`w-full text-left p-3 rounded-md border-2 transition ${style}`}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
               </div>
+
+              {validated && (
+                <div className={`rounded-lg p-4 text-sm ${isCorrect ? "bg-success/10 border border-success/30" : "bg-destructive/10 border border-destructive/30"}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    {isCorrect ? (
+                      <CheckCircle2 className="h-4 w-4 text-success" />
+                    ) : (
+                      <XCircle className="h-4 w-4 text-destructive" />
+                    )}
+                    <span className="font-medium">{isCorrect ? "Bonne réponse !" : "Mauvaise réponse"}</span>
+                  </div>
+                  {!isCorrect && (
+                    <p className="mb-1">Réponse correcte : <span className="font-medium text-success">{q.bonne_reponse}</span></p>
+                  )}
+                  <p className="text-muted-foreground italic">{q.explication}</p>
+                  <SourceBadge source={q.source_officielle} date={q.date_verification} />
+                </div>
+              )}
             </CardContent>
           </Card>
-          <div className="flex justify-between gap-2">
-            <Button variant="outline" disabled={current === 0} onClick={() => setCurrent((c) => c - 1)}>
-              Précédent
-            </Button>
-            {current < questions.length - 1 ? (
-              <Button onClick={() => setCurrent((c) => c + 1)} className="bg-gradient-republic">Suivant</Button>
+          <div className="flex justify-end">
+            {!validated ? (
+              <Button onClick={validate} disabled={!selected} className="bg-gradient-republic">
+                Valider
+              </Button>
             ) : (
-              <Button onClick={() => setPhase("result")} className="bg-republic text-republic-foreground">Terminer l'examen</Button>
+              <Button onClick={next}>
+                {current + 1 >= questions.length ? "Voir le résultat" : "Suivant"} <ArrowRight className="h-4 w-4 ml-1" />
+              </Button>
             )}
           </div>
         </div>
