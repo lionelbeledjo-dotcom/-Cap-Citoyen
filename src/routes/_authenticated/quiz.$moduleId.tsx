@@ -243,7 +243,7 @@ function QuizPage() {
             </Button>
           ) : (
             <Button onClick={next}>
-              {current + 1 >= questions.length ? "Voir le résultat" : "Suivante"} <ArrowRight className="h-4 w-4 ml-1" />
+              {current + 1 >= questions.length ? "Voir mon score" : "Suivant"} <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           )}
         </div>

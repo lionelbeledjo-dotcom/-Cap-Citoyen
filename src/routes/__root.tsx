@@ -86,6 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google", content: "notranslate" },
       { title: "Cap Citoyen — Carte de résident & nationalité française" },
       {
         name: "description",
@@ -99,9 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:title", content: "Cap Citoyen — Carte de résident & nationalité française" },
-      { name: "description", content: "App assists foreigners in France with obtaining a 10-year resident card and French nationality." },
-      { property: "og:description", content: "App assists foreigners in France with obtaining a 10-year resident card and French nationality." },
-      { name: "twitter:description", content: "App assists foreigners in France with obtaining a 10-year resident card and French nationality." },
+      { name: "twitter:description", content: "Accompagnement pédagogique pour la carte de résident et la nationalité française." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8f149c1f-b565-465e-be3d-0e4a0efc26ab/id-preview-36d435e9--2317c7fd-7611-4a0f-abd7-37cdd57c905b.lovable.app-1781855283890.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8f149c1f-b565-465e-be3d-0e4a0efc26ab/id-preview-36d435e9--2317c7fd-7611-4a0f-abd7-37cdd57c905b.lovable.app-1781855283890.png" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -124,7 +123,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="fr" translate="no">
       <head>
         <HeadContent />
       </head>
