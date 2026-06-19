@@ -30,6 +30,7 @@ import { Route as AuthenticatedQuizModuleIdRouteImport } from './routes/_authent
 import { Route as AuthenticatedParcoursModuleIdRouteImport } from './routes/_authenticated/parcours.$moduleId'
 import { Route as AuthenticatedModulesIdRouteImport } from './routes/_authenticated/modules.$id'
 import { Route as AuthenticatedLeconLeconIdRouteImport } from './routes/_authenticated/lecon.$leconId'
+import { Route as AuthenticatedAdminUtilisateursRouteImport } from './routes/_authenticated/admin/utilisateurs'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated/admin/questions'
 import { Route as AuthenticatedAdminModulesRouteImport } from './routes/_authenticated/admin/modules'
 import { Route as AuthenticatedParcoursModuleIdLeconLeconIdRouteImport } from './routes/_authenticated/parcours.$moduleId.lecon.$leconId'
@@ -144,6 +145,12 @@ const AuthenticatedLeconLeconIdRoute =
     path: '/lecon/$leconId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminUtilisateursRoute =
+  AuthenticatedAdminUtilisateursRouteImport.update({
+    id: '/utilisateurs',
+    path: '/utilisateurs',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminQuestionsRoute =
   AuthenticatedAdminQuestionsRouteImport.update({
     id: '/questions',
@@ -181,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
   '/admin/modules': typeof AuthenticatedAdminModulesRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
+  '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/modules/$id': typeof AuthenticatedModulesIdRoute
   '/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdRouteWithChildren
@@ -205,6 +213,7 @@ export interface FileRoutesByTo {
   '/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
   '/admin/modules': typeof AuthenticatedAdminModulesRoute
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
+  '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/modules/$id': typeof AuthenticatedModulesIdRoute
   '/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdRouteWithChildren
@@ -232,6 +241,7 @@ export interface FileRoutesById {
   '/_authenticated/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
   '/_authenticated/admin/modules': typeof AuthenticatedAdminModulesRoute
   '/_authenticated/admin/questions': typeof AuthenticatedAdminQuestionsRoute
+  '/_authenticated/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/_authenticated/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/_authenticated/modules/$id': typeof AuthenticatedModulesIdRoute
   '/_authenticated/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdRouteWithChildren
@@ -259,6 +269,7 @@ export interface FileRouteTypes {
     | '/tableau-de-bord'
     | '/admin/modules'
     | '/admin/questions'
+    | '/admin/utilisateurs'
     | '/lecon/$leconId'
     | '/modules/$id'
     | '/parcours/$moduleId'
@@ -283,6 +294,7 @@ export interface FileRouteTypes {
     | '/tableau-de-bord'
     | '/admin/modules'
     | '/admin/questions'
+    | '/admin/utilisateurs'
     | '/lecon/$leconId'
     | '/modules/$id'
     | '/parcours/$moduleId'
@@ -309,6 +321,7 @@ export interface FileRouteTypes {
     | '/_authenticated/tableau-de-bord'
     | '/_authenticated/admin/modules'
     | '/_authenticated/admin/questions'
+    | '/_authenticated/admin/utilisateurs'
     | '/_authenticated/lecon/$leconId'
     | '/_authenticated/modules/$id'
     | '/_authenticated/parcours/$moduleId'
@@ -477,6 +490,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLeconLeconIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/utilisateurs': {
+      id: '/_authenticated/admin/utilisateurs'
+      path: '/utilisateurs'
+      fullPath: '/admin/utilisateurs'
+      preLoaderRoute: typeof AuthenticatedAdminUtilisateursRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/questions': {
       id: '/_authenticated/admin/questions'
       path: '/questions'
@@ -504,6 +524,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminModulesRoute: typeof AuthenticatedAdminModulesRoute
   AuthenticatedAdminQuestionsRoute: typeof AuthenticatedAdminQuestionsRoute
+  AuthenticatedAdminUtilisateursRoute: typeof AuthenticatedAdminUtilisateursRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
@@ -511,6 +532,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
   {
     AuthenticatedAdminModulesRoute: AuthenticatedAdminModulesRoute,
     AuthenticatedAdminQuestionsRoute: AuthenticatedAdminQuestionsRoute,
+    AuthenticatedAdminUtilisateursRoute: AuthenticatedAdminUtilisateursRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   }
 

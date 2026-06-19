@@ -26,6 +26,7 @@ function AdminLayout() {
             <AdminLink to="/admin">Tableau</AdminLink>
             <AdminLink to="/admin/modules">Modules & leçons</AdminLink>
             <AdminLink to="/admin/questions">Questions</AdminLink>
+            <AdminLink to="/admin/utilisateurs">Utilisateurs</AdminLink>
           </nav>
         </div>
       </div>
