@@ -12,7 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Search, Upload } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Upload, Database } from "lucide-react";
+import seedBase from "../../../../seed-questions.json";
+import seedExtra from "../../../../seed-questions-extra.json";
 
 export const Route = createFileRoute("/_authenticated/admin/questions")({
   component: AdminQuestions,
@@ -99,6 +101,19 @@ function AdminQuestions() {
     qc.invalidateQueries({ queryKey: ["admin-questions"] });
   };
 
+  const seedAll = async () => {
+    if (!confirm("Insérer les 88 questions d'entraînement ? (ignoré si déjà présentes)")) return;
+    const all = [...seedBase, ...seedExtra];
+    const { error, count } = await supabase.from("questions").insert(all as any, { count: "exact" });
+    if (error) {
+      if (error.code === "23505") toast.info("Des questions existent déjà.");
+      else toast.error(error.message);
+      return;
+    }
+    toast.success(`${count} questions insérées !`);
+    qc.invalidateQueries({ queryKey: ["admin-questions"] });
+  };
+
   const startEdit = (q?: any) => {
     if (!q) {
       setEditing({ ...EMPTY, module_id: modules?.[0]?.id ?? "" });
@@ -124,6 +139,11 @@ function AdminQuestions() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="font-display text-3xl font-bold">Questions ({filtered.length})</h1>
           <div className="flex gap-2">
+            {(questions?.length ?? 0) === 0 && (
+              <Button variant="outline" onClick={seedAll}>
+                <Database className="h-4 w-4 mr-1" /> Peupler (88 questions)
+              </Button>
+            )}
             <Button variant="outline" onClick={() => setImportOpen(true)}>
               <Upload className="h-4 w-4 mr-1" /> Import JSON
             </Button>
