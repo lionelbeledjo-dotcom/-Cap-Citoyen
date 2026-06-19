@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/use-auth";
 import { IdCard, Flag, GraduationCap, Languages, ChevronRight } from "lucide-react";
 
@@ -42,53 +44,53 @@ function ParcoursPage() {
       <div className="container mx-auto max-w-5xl px-4 py-10 space-y-8">
         <div>
           <h1 className="font-display text-3xl font-bold">Parcours d'apprentissage</h1>
-          <p className="text-muted-foreground">Modules organisés par thématique. Chaque leçon cite ses sources officielles.</p>
+          <p className="text-muted-foreground">Cliquez sur un module pour voir ses leçons et commencer l'apprentissage.</p>
         </div>
 
-        <div className="space-y-6">
+        <div className="grid md:grid-cols-2 gap-4">
           {modules?.map((m: any) => {
             const cat = CATEGORIES[m.categorie] ?? { label: m.categorie, icon: GraduationCap };
             const Icon = cat.icon;
             const lecons = (m.lecons ?? []).sort((a: any, b: any) => a.ordre - b.ordre);
+            const total = lecons.length;
             const doneCount = lecons.filter((l: any) => progression?.some((p) => p.lecon_id === l.id && p.statut === "termine")).length;
+            const pct = total ? Math.round((doneCount / total) * 100) : 0;
+            const status = doneCount === 0 ? "non_commence" : doneCount >= total ? "termine" : "en_cours";
+            const statusLabel = status === "non_commence" ? "Commencer" : status === "termine" ? "Revoir" : "Reprendre";
+
             return (
-              <Card key={m.id} className="overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="flex items-center gap-3 bg-muted/40 px-6 py-4 border-b">
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                      <Icon className="h-5 w-5" />
+              <Link key={m.id} to="/parcours/$moduleId" params={{ moduleId: m.id }} className="block group">
+                <Card className="h-full hover:shadow-elegant transition-all hover:-translate-y-0.5">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-start gap-3">
+                      <div className="h-11 w-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h2 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">{m.titre}</h2>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{m.description}</p>
+                      </div>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary shrink-0 mt-1" />
                     </div>
-                    <div className="flex-1">
-                      <h2 className="font-display text-xl font-semibold">{m.titre}</h2>
-                      <p className="text-sm text-muted-foreground">{m.description}</p>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground">{doneCount}/{total} leçons</span>
+                        <Badge variant={status === "termine" ? "default" : status === "en_cours" ? "secondary" : "outline"}>
+                          {statusLabel}
+                        </Badge>
+                      </div>
+                      <Progress value={pct} className="h-1.5" />
                     </div>
-                    <Badge variant="secondary">{doneCount}/{lecons.length}</Badge>
-                  </div>
-                  <ul className="divide-y">
-                    {lecons.length === 0 && <li className="p-6 text-sm text-muted-foreground">Aucune leçon dans ce module pour le moment.</li>}
-                    {lecons.map((l: any) => {
-                      const done = progression?.some((p) => p.lecon_id === l.id && p.statut === "termine");
-                      return (
-                        <li key={l.id}>
-                          <Link
-                            to="/lecon/$leconId"
-                            params={{ leconId: l.id }}
-                            className="flex items-center gap-3 p-4 hover:bg-accent transition group"
-                          >
-                            <div className={`h-2 w-2 rounded-full ${done ? "bg-success" : "bg-muted-foreground/30"}`} />
-                            <span className="flex-1">{l.titre}</span>
-                            {done && <Badge variant="outline" className="text-success border-success/30">Terminé</Badge>}
-                            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             );
           })}
         </div>
+
+        {(!modules || modules.length === 0) && (
+          <p className="text-center text-muted-foreground py-12">Aucun module disponible pour le moment.</p>
+        )}
       </div>
     </AppShell>
   );

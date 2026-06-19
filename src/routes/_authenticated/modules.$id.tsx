@@ -1,5 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/modules/$id")({
-  beforeLoad: () => { throw redirect({ to: "/parcours" }); },
+  beforeLoad: ({ params }) => {
+    throw redirect({ to: "/parcours/$moduleId", params: { moduleId: params.id } });
+  },
 });

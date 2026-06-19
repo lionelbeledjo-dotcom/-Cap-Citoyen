@@ -122,20 +122,22 @@ function Dashboard() {
           </Card>
 
           <Card className="bg-gradient-republic text-primary-foreground">
-            <CardHeader><CardTitle className="font-display flex items-center gap-2"><GraduationCap className="h-5 w-5" /> Continuer</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="font-display flex items-center gap-2"><GraduationCap className="h-5 w-5" /> Mon parcours</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               {next ? (
                 <>
-                  <p className="text-sm opacity-90">Prochaine leçon recommandée :</p>
+                  <p className="text-sm opacity-90">
+                    {done === 0 ? "Commencez votre première leçon :" : "Prochaine leçon :"}
+                  </p>
                   <p className="font-semibold">{next.titre}</p>
                   <Button asChild variant="secondary" className="w-full">
-                    <Link to="/lecon/$leconId" params={{ leconId: next.id }}>
-                      Reprendre <ArrowRight className="h-4 w-4 ml-1" />
+                    <Link to="/parcours/$moduleId/lecon/$leconId" params={{ moduleId: next.module_id, leconId: next.id }}>
+                      {done === 0 ? "Commencer" : "Reprendre"} <ArrowRight className="h-4 w-4 ml-1" />
                     </Link>
                   </Button>
                 </>
               ) : (
-                <p className="text-sm">Bravo ! Toutes les leçons sont terminées. Lancez un examen blanc.</p>
+                <p className="text-sm">Toutes les leçons sont terminées. Lancez un examen blanc !</p>
               )}
               <Button asChild variant="outline" className="w-full border-white/40 text-white hover:bg-white/10 hover:text-white">
                 <Link to="/examen-blanc">Examen civique blanc</Link>

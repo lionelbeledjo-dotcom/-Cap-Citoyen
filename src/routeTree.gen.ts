@@ -27,10 +27,12 @@ import { Route as AuthenticatedChecklistRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedQuizModuleIdRouteImport } from './routes/_authenticated/quiz.$moduleId'
+import { Route as AuthenticatedParcoursModuleIdRouteImport } from './routes/_authenticated/parcours.$moduleId'
 import { Route as AuthenticatedModulesIdRouteImport } from './routes/_authenticated/modules.$id'
 import { Route as AuthenticatedLeconLeconIdRouteImport } from './routes/_authenticated/lecon.$leconId'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated/admin/questions'
 import { Route as AuthenticatedAdminModulesRouteImport } from './routes/_authenticated/admin/modules'
+import { Route as AuthenticatedParcoursModuleIdLeconLeconIdRouteImport } from './routes/_authenticated/parcours.$moduleId.lecon.$leconId'
 
 const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
   id: '/mot-de-passe-oublie',
@@ -125,6 +127,12 @@ const AuthenticatedQuizModuleIdRoute =
     path: '/quiz/$moduleId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedParcoursModuleIdRoute =
+  AuthenticatedParcoursModuleIdRouteImport.update({
+    id: '/$moduleId',
+    path: '/$moduleId',
+    getParentRoute: () => AuthenticatedParcoursRoute,
+  } as any)
 const AuthenticatedModulesIdRoute = AuthenticatedModulesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -148,6 +156,12 @@ const AuthenticatedAdminModulesRoute =
     path: '/modules',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedParcoursModuleIdLeconLeconIdRoute =
+  AuthenticatedParcoursModuleIdLeconLeconIdRouteImport.update({
+    id: '/lecon/$leconId',
+    path: '/lecon/$leconId',
+    getParentRoute: () => AuthenticatedParcoursModuleIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -161,7 +175,7 @@ export interface FileRoutesByFullPath {
   '/checklist': typeof AuthenticatedChecklistRoute
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/modules': typeof AuthenticatedModulesRouteWithChildren
-  '/parcours': typeof AuthenticatedParcoursRoute
+  '/parcours': typeof AuthenticatedParcoursRouteWithChildren
   '/profil': typeof AuthenticatedProfilRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
   '/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
@@ -169,8 +183,10 @@ export interface FileRoutesByFullPath {
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/modules/$id': typeof AuthenticatedModulesIdRoute
+  '/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdRouteWithChildren
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/parcours/$moduleId/lecon/$leconId': typeof AuthenticatedParcoursModuleIdLeconLeconIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -183,7 +199,7 @@ export interface FileRoutesByTo {
   '/checklist': typeof AuthenticatedChecklistRoute
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/modules': typeof AuthenticatedModulesRouteWithChildren
-  '/parcours': typeof AuthenticatedParcoursRoute
+  '/parcours': typeof AuthenticatedParcoursRouteWithChildren
   '/profil': typeof AuthenticatedProfilRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
   '/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
@@ -191,8 +207,10 @@ export interface FileRoutesByTo {
   '/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/modules/$id': typeof AuthenticatedModulesIdRoute
+  '/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdRouteWithChildren
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/parcours/$moduleId/lecon/$leconId': typeof AuthenticatedParcoursModuleIdLeconLeconIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -208,7 +226,7 @@ export interface FileRoutesById {
   '/_authenticated/checklist': typeof AuthenticatedChecklistRoute
   '/_authenticated/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/_authenticated/modules': typeof AuthenticatedModulesRouteWithChildren
-  '/_authenticated/parcours': typeof AuthenticatedParcoursRoute
+  '/_authenticated/parcours': typeof AuthenticatedParcoursRouteWithChildren
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/tableau-bord': typeof AuthenticatedTableauBordRoute
   '/_authenticated/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
@@ -216,8 +234,10 @@ export interface FileRoutesById {
   '/_authenticated/admin/questions': typeof AuthenticatedAdminQuestionsRoute
   '/_authenticated/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/_authenticated/modules/$id': typeof AuthenticatedModulesIdRoute
+  '/_authenticated/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdRouteWithChildren
   '/_authenticated/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/parcours/$moduleId/lecon/$leconId': typeof AuthenticatedParcoursModuleIdLeconLeconIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -241,8 +261,10 @@ export interface FileRouteTypes {
     | '/admin/questions'
     | '/lecon/$leconId'
     | '/modules/$id'
+    | '/parcours/$moduleId'
     | '/quiz/$moduleId'
     | '/admin/'
+    | '/parcours/$moduleId/lecon/$leconId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -263,8 +285,10 @@ export interface FileRouteTypes {
     | '/admin/questions'
     | '/lecon/$leconId'
     | '/modules/$id'
+    | '/parcours/$moduleId'
     | '/quiz/$moduleId'
     | '/admin'
+    | '/parcours/$moduleId/lecon/$leconId'
   id:
     | '__root__'
     | '/'
@@ -287,8 +311,10 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/questions'
     | '/_authenticated/lecon/$leconId'
     | '/_authenticated/modules/$id'
+    | '/_authenticated/parcours/$moduleId'
     | '/_authenticated/quiz/$moduleId'
     | '/_authenticated/admin/'
+    | '/_authenticated/parcours/$moduleId/lecon/$leconId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -430,6 +456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQuizModuleIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/parcours/$moduleId': {
+      id: '/_authenticated/parcours/$moduleId'
+      path: '/$moduleId'
+      fullPath: '/parcours/$moduleId'
+      preLoaderRoute: typeof AuthenticatedParcoursModuleIdRouteImport
+      parentRoute: typeof AuthenticatedParcoursRoute
+    }
     '/_authenticated/modules/$id': {
       id: '/_authenticated/modules/$id'
       path: '/$id'
@@ -457,6 +490,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/modules'
       preLoaderRoute: typeof AuthenticatedAdminModulesRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/parcours/$moduleId/lecon/$leconId': {
+      id: '/_authenticated/parcours/$moduleId/lecon/$leconId'
+      path: '/lecon/$leconId'
+      fullPath: '/parcours/$moduleId/lecon/$leconId'
+      preLoaderRoute: typeof AuthenticatedParcoursModuleIdLeconLeconIdRouteImport
+      parentRoute: typeof AuthenticatedParcoursModuleIdRoute
     }
   }
 }
@@ -490,12 +530,41 @@ const AuthenticatedModulesRouteChildren: AuthenticatedModulesRouteChildren = {
 const AuthenticatedModulesRouteWithChildren =
   AuthenticatedModulesRoute._addFileChildren(AuthenticatedModulesRouteChildren)
 
+interface AuthenticatedParcoursModuleIdRouteChildren {
+  AuthenticatedParcoursModuleIdLeconLeconIdRoute: typeof AuthenticatedParcoursModuleIdLeconLeconIdRoute
+}
+
+const AuthenticatedParcoursModuleIdRouteChildren: AuthenticatedParcoursModuleIdRouteChildren =
+  {
+    AuthenticatedParcoursModuleIdLeconLeconIdRoute:
+      AuthenticatedParcoursModuleIdLeconLeconIdRoute,
+  }
+
+const AuthenticatedParcoursModuleIdRouteWithChildren =
+  AuthenticatedParcoursModuleIdRoute._addFileChildren(
+    AuthenticatedParcoursModuleIdRouteChildren,
+  )
+
+interface AuthenticatedParcoursRouteChildren {
+  AuthenticatedParcoursModuleIdRoute: typeof AuthenticatedParcoursModuleIdRouteWithChildren
+}
+
+const AuthenticatedParcoursRouteChildren: AuthenticatedParcoursRouteChildren = {
+  AuthenticatedParcoursModuleIdRoute:
+    AuthenticatedParcoursModuleIdRouteWithChildren,
+}
+
+const AuthenticatedParcoursRouteWithChildren =
+  AuthenticatedParcoursRoute._addFileChildren(
+    AuthenticatedParcoursRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedChecklistRoute: typeof AuthenticatedChecklistRoute
   AuthenticatedExamenBlancRoute: typeof AuthenticatedExamenBlancRoute
   AuthenticatedModulesRoute: typeof AuthenticatedModulesRouteWithChildren
-  AuthenticatedParcoursRoute: typeof AuthenticatedParcoursRoute
+  AuthenticatedParcoursRoute: typeof AuthenticatedParcoursRouteWithChildren
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedTableauBordRoute: typeof AuthenticatedTableauBordRoute
   AuthenticatedTableauDeBordRoute: typeof AuthenticatedTableauDeBordRoute
@@ -508,7 +577,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedChecklistRoute: AuthenticatedChecklistRoute,
   AuthenticatedExamenBlancRoute: AuthenticatedExamenBlancRoute,
   AuthenticatedModulesRoute: AuthenticatedModulesRouteWithChildren,
-  AuthenticatedParcoursRoute: AuthenticatedParcoursRoute,
+  AuthenticatedParcoursRoute: AuthenticatedParcoursRouteWithChildren,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedTableauBordRoute: AuthenticatedTableauBordRoute,
   AuthenticatedTableauDeBordRoute: AuthenticatedTableauDeBordRoute,
