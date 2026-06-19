@@ -25,6 +25,7 @@ import { Route as AuthenticatedModulesRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedExamenBlancRouteImport } from './routes/_authenticated/examen-blanc'
 import { Route as AuthenticatedChecklistRouteImport } from './routes/_authenticated/checklist'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
+import { Route as AuthenticatedParcoursIndexRouteImport } from './routes/_authenticated/parcours.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedQuizModuleIdRouteImport } from './routes/_authenticated/quiz.$moduleId'
 import { Route as AuthenticatedParcoursModuleIdRouteImport } from './routes/_authenticated/parcours.$moduleId'
@@ -33,6 +34,7 @@ import { Route as AuthenticatedLeconLeconIdRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminUtilisateursRouteImport } from './routes/_authenticated/admin/utilisateurs'
 import { Route as AuthenticatedAdminQuestionsRouteImport } from './routes/_authenticated/admin/questions'
 import { Route as AuthenticatedAdminModulesRouteImport } from './routes/_authenticated/admin/modules'
+import { Route as AuthenticatedParcoursModuleIdIndexRouteImport } from './routes/_authenticated/parcours.$moduleId.index'
 import { Route as AuthenticatedParcoursModuleIdLeconLeconIdRouteImport } from './routes/_authenticated/parcours.$moduleId.lecon.$leconId'
 
 const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
@@ -117,6 +119,12 @@ const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedParcoursIndexRoute =
+  AuthenticatedParcoursIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedParcoursRoute,
+  } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -163,6 +171,12 @@ const AuthenticatedAdminModulesRoute =
     path: '/modules',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedParcoursModuleIdIndexRoute =
+  AuthenticatedParcoursModuleIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedParcoursModuleIdRoute,
+  } as any)
 const AuthenticatedParcoursModuleIdLeconLeconIdRoute =
   AuthenticatedParcoursModuleIdLeconLeconIdRouteImport.update({
     id: '/lecon/$leconId',
@@ -194,6 +208,8 @@ export interface FileRoutesByFullPath {
   '/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdRouteWithChildren
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/parcours/': typeof AuthenticatedParcoursIndexRoute
+  '/parcours/$moduleId/': typeof AuthenticatedParcoursModuleIdIndexRoute
   '/parcours/$moduleId/lecon/$leconId': typeof AuthenticatedParcoursModuleIdLeconLeconIdRoute
 }
 export interface FileRoutesByTo {
@@ -207,7 +223,6 @@ export interface FileRoutesByTo {
   '/checklist': typeof AuthenticatedChecklistRoute
   '/examen-blanc': typeof AuthenticatedExamenBlancRoute
   '/modules': typeof AuthenticatedModulesRouteWithChildren
-  '/parcours': typeof AuthenticatedParcoursRouteWithChildren
   '/profil': typeof AuthenticatedProfilRoute
   '/tableau-bord': typeof AuthenticatedTableauBordRoute
   '/tableau-de-bord': typeof AuthenticatedTableauDeBordRoute
@@ -216,9 +231,10 @@ export interface FileRoutesByTo {
   '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/lecon/$leconId': typeof AuthenticatedLeconLeconIdRoute
   '/modules/$id': typeof AuthenticatedModulesIdRoute
-  '/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdRouteWithChildren
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/parcours': typeof AuthenticatedParcoursIndexRoute
+  '/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdIndexRoute
   '/parcours/$moduleId/lecon/$leconId': typeof AuthenticatedParcoursModuleIdLeconLeconIdRoute
 }
 export interface FileRoutesById {
@@ -247,6 +263,8 @@ export interface FileRoutesById {
   '/_authenticated/parcours/$moduleId': typeof AuthenticatedParcoursModuleIdRouteWithChildren
   '/_authenticated/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/parcours/': typeof AuthenticatedParcoursIndexRoute
+  '/_authenticated/parcours/$moduleId/': typeof AuthenticatedParcoursModuleIdIndexRoute
   '/_authenticated/parcours/$moduleId/lecon/$leconId': typeof AuthenticatedParcoursModuleIdLeconLeconIdRoute
 }
 export interface FileRouteTypes {
@@ -275,6 +293,8 @@ export interface FileRouteTypes {
     | '/parcours/$moduleId'
     | '/quiz/$moduleId'
     | '/admin/'
+    | '/parcours/'
+    | '/parcours/$moduleId/'
     | '/parcours/$moduleId/lecon/$leconId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -288,7 +308,6 @@ export interface FileRouteTypes {
     | '/checklist'
     | '/examen-blanc'
     | '/modules'
-    | '/parcours'
     | '/profil'
     | '/tableau-bord'
     | '/tableau-de-bord'
@@ -297,9 +316,10 @@ export interface FileRouteTypes {
     | '/admin/utilisateurs'
     | '/lecon/$leconId'
     | '/modules/$id'
-    | '/parcours/$moduleId'
     | '/quiz/$moduleId'
     | '/admin'
+    | '/parcours'
+    | '/parcours/$moduleId'
     | '/parcours/$moduleId/lecon/$leconId'
   id:
     | '__root__'
@@ -327,6 +347,8 @@ export interface FileRouteTypes {
     | '/_authenticated/parcours/$moduleId'
     | '/_authenticated/quiz/$moduleId'
     | '/_authenticated/admin/'
+    | '/_authenticated/parcours/'
+    | '/_authenticated/parcours/$moduleId/'
     | '/_authenticated/parcours/$moduleId/lecon/$leconId'
   fileRoutesById: FileRoutesById
 }
@@ -455,6 +477,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/parcours/': {
+      id: '/_authenticated/parcours/'
+      path: '/'
+      fullPath: '/parcours/'
+      preLoaderRoute: typeof AuthenticatedParcoursIndexRouteImport
+      parentRoute: typeof AuthenticatedParcoursRoute
+    }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/'
@@ -511,6 +540,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminModulesRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/parcours/$moduleId/': {
+      id: '/_authenticated/parcours/$moduleId/'
+      path: '/'
+      fullPath: '/parcours/$moduleId/'
+      preLoaderRoute: typeof AuthenticatedParcoursModuleIdIndexRouteImport
+      parentRoute: typeof AuthenticatedParcoursModuleIdRoute
+    }
     '/_authenticated/parcours/$moduleId/lecon/$leconId': {
       id: '/_authenticated/parcours/$moduleId/lecon/$leconId'
       path: '/lecon/$leconId'
@@ -553,11 +589,14 @@ const AuthenticatedModulesRouteWithChildren =
   AuthenticatedModulesRoute._addFileChildren(AuthenticatedModulesRouteChildren)
 
 interface AuthenticatedParcoursModuleIdRouteChildren {
+  AuthenticatedParcoursModuleIdIndexRoute: typeof AuthenticatedParcoursModuleIdIndexRoute
   AuthenticatedParcoursModuleIdLeconLeconIdRoute: typeof AuthenticatedParcoursModuleIdLeconLeconIdRoute
 }
 
 const AuthenticatedParcoursModuleIdRouteChildren: AuthenticatedParcoursModuleIdRouteChildren =
   {
+    AuthenticatedParcoursModuleIdIndexRoute:
+      AuthenticatedParcoursModuleIdIndexRoute,
     AuthenticatedParcoursModuleIdLeconLeconIdRoute:
       AuthenticatedParcoursModuleIdLeconLeconIdRoute,
   }
@@ -569,11 +608,13 @@ const AuthenticatedParcoursModuleIdRouteWithChildren =
 
 interface AuthenticatedParcoursRouteChildren {
   AuthenticatedParcoursModuleIdRoute: typeof AuthenticatedParcoursModuleIdRouteWithChildren
+  AuthenticatedParcoursIndexRoute: typeof AuthenticatedParcoursIndexRoute
 }
 
 const AuthenticatedParcoursRouteChildren: AuthenticatedParcoursRouteChildren = {
   AuthenticatedParcoursModuleIdRoute:
     AuthenticatedParcoursModuleIdRouteWithChildren,
+  AuthenticatedParcoursIndexRoute: AuthenticatedParcoursIndexRoute,
 }
 
 const AuthenticatedParcoursRouteWithChildren =
@@ -623,3 +664,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
